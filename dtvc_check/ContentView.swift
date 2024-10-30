@@ -8,17 +8,68 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var testBool: Bool = false
+    @State var countVal: Int = 0
+    @ObservedObject var CounterMOdelObject = CounterModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
+        Toggle(isOn: $testBool, label: {
+            Text("Switch")
+        })
         .padding()
+        Text("Parent Count: \(countVal)")
+        ChildView(argVal: $countVal, argVal2: $CounterMOdelObject.testInt)
+//        VStack{
+//            Button("Press Here"){
+//             countVal += 1
+//            }
+//            
+//            
+//        }
+        
+        
+
+        
     }
 }
 
+
+//Passing state between views
+
+struct ChildView: View{
+    @Binding var argVal: Int
+    @Binding var argVal2: Int
+  
+    var body: some View {
+        VStack{
+           
+            Button("nButton"){
+                argVal += 1
+            }
+            Text("Child Count: \(argVal)")
+            
+           
+        }
+        
+        
+        Button("ModelButton"){
+            argVal2 += 1
+        }
+        Text("Child Model Data Count: \(argVal2)")
+    }
+    
+    
+}
+
+
 #Preview {
     ContentView()
+}
+
+
+class CounterModel: ObservableObject {
+     
+    @Published var testInt: Int = 0
+    
+    
 }
